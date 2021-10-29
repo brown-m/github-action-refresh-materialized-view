@@ -1,6 +1,8 @@
 FROM python:3-slim
 ADD . /app
 WORKDIR /app
-RUN pip install psycopg2
+RUN apt-get update \
+    && apt-get -y install libpq-dev gcc \
+    && pip install psycopg2
 ENV PYTHONPATH /app
 CMD ["main.py"]
