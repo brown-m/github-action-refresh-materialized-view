@@ -1,0 +1,11 @@
+name: "Refresh Materialized Views"
+description: "Refresh a materialized view in Postgres or Redshift"
+author: "Matt Brown"
+inputs:
+  view:
+    description: "The name of the view to be refreshed in schema.view_name format"
+    required: true
+
+runs:
+  using: "docker"
+  image: "Dockerfile"
