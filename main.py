@@ -10,10 +10,9 @@ def main():
             port=os.environ["DB_PORT"], 
             database=os.environ["DB_DATABASE"]) as connection:
             with connection.cursor() as cursor:
-                connection.autocommit = True
                 print("Refreshing materialized view " + os.environ["INPUT_VIEW"])
                 cursor.execute(f'refresh materialized view {os.environ["INPUT_VIEW"]};')
-                exit()
+                connection.commit()
 
     except (Exception, psycopg2.Error) as error:
         print("Failed to refresh materialized view: ", error)
