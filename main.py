@@ -1,5 +1,6 @@
 import psycopg2
 import os
+import time
 
 
 def main():
@@ -11,8 +12,10 @@ def main():
             database=os.environ["DB_DATABASE"]) as connection:
             with connection.cursor() as cursor:
                 print("Refreshing materialized view " + os.environ["INPUT_VIEW"])
+                time.sleep(3) # Sleep for 3 seconds to prevent call from ending too quickly and the action hanging
                 cursor.execute(f'refresh materialized view {os.environ["INPUT_VIEW"]};')
                 connection.commit()
+                exit()
 
     except (Exception, psycopg2.Error) as error:
         print("Failed to refresh materialized view: ", error)
