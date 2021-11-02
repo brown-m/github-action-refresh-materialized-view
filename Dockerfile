@@ -4,13 +4,13 @@ WORKDIR /app
 
 COPY cmd/main.go ./
 RUN go get github.com/lib/pq
-RUN go build -o /run
+RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o refresh-view cmd/main.go
 
 FROM gcr.io/distroless/base-debian10
 
 WORKDIR /
-COPY --from=build /run /run
+COPY --from=build /app/refresh-view /refresh-view
 
 USER nonroot:nonroot
 
-ENTRYPOINT ["/run"]
+ENTRYPOINT ["/refresh-view"]
