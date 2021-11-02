@@ -21,18 +21,20 @@ func main() {
 	defer db.Close()
 
 	fmt.Printf("Refreshing materialized view %s...\n", os.Getenv("INPUT_VIEW"))
-	query := "refresh materialized view " + os.Getenv("INPUT_VIEW")
+	query := fmt.Sprintf("refresh materialized view %s;", os.Getenv("INPUT_VIEW"))
 
 	for failures < RETRIES {
 		_, err = db.Exec(query)
 		if err != nil {
 			fmt.Printf("Failed to execute query: %s\n", err)
 			failures += 1
-			fmt.Println("Retrying...")
 		} else {
+			fmt.Println("...DONE")
 			break
 		}
 	}
 
-	fmt.Println("...DONE")
+	if failures == RETRIES-1 {
+		os.Exit(1) // Exit with non-zero value to indicate an error
+	}
 }
