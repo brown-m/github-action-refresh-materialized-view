@@ -30,13 +30,11 @@ func main() {
 			failures += 1
 		} else {
 			fmt.Println("...DONE")
-			break
+			os.Exit(0)
 		}
 	}
 
 	fmt.Printf("Exited with failure count %v", failures)
+	os.Exit(1) // Exit with non-zero value to indicate an error
 
-	if failures == RETRIES-1 {
-		os.Exit(1) // Exit with non-zero value to indicate an error
-	}
 }
